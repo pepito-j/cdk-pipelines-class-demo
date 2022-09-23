@@ -33,11 +33,13 @@ class SNSStage extends Stage {
         super(scope, id, props)
         new TopicsStack(this, "MyTopicsStack1",{
           env: {
+            account: "848135204948",
             region: "us-west-2"
           }
         })
         new TopicsStack(this, "MyTopicsStack2", {
           env: {
+            account: "848135204948",
             region: "us-east-1"
           }
         })
