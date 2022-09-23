@@ -12,6 +12,7 @@ export class CdkPipelineDemoStack extends Stack {
 
     // Initialize the pipeline
     const cdkPipeline = new cdk_pip.CodePipeline(this, "CDKPipeline", {
+      crossAccountKeys: true, // Allow cross region/account deployment
       synth: new cdk_pip.ShellStep('SynthesizeStep', {
         input: cdk_pip.CodePipelineSource.connection('pepitoj-amzn/cdk-pipelines-class-demo', 'master', {
           connectionArn: 'arn:aws:codestar-connections:us-west-2:848135204948:connection/5ba7c6b8-2a9d-4b53-8c96-adf5ae0eeab5',
