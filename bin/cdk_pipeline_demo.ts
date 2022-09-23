@@ -6,5 +6,7 @@ import { CdkPipelineDemoStack } from '../lib/cdk_pipeline';
 
 const app = new cdk.App();
 new CdkPipelineDemoStack(app, 'CdkPipelineDemoStack', {
-  env: { region: 'us-west-2' }
+  env: { 
+    region: 'us-west-2' 
+  }
 });
