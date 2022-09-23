@@ -8,9 +8,3 @@ const app = new cdk.App();
 new CdkPipelineDemoStack(app, 'CdkPipelineDemoStack', {
   env: { region: 'us-west-2' }
 });
-new CdkPipelineDemoStack(app, 'CdkPipelineDemoStack', {
-  env: { region: 'us-east-2' }
-});
-new CdkPipelineDemoStack(app, 'CdkPipelineDemoStack', {
-  env: { region: 'us-east-1' }
-});
