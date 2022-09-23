@@ -31,7 +31,11 @@ export class CdkPipelineDemoStack extends Stack {
 class SNSStage extends Stage {
     constructor(scope: Construct, id: string, props?: StageProps){
         super(scope, id, props)
-        new TopicsStack(this, "MyTopicsStack1")
+        new TopicsStack(this, "MyTopicsStack1",{
+          env: {
+            region: "us-west-2"
+          }
+        })
         new TopicsStack(this, "MyTopicsStack2", {
           env: {
             region: "us-east-1"
