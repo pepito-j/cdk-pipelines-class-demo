@@ -35,6 +35,11 @@ export class CdkPipelineDemoStack extends Stack {
         region: "us-west-2"
     }
     }))
+    cdkPipeline.addStage(new SNSStage(this, "SNSStage3", {
+      env: {
+        region: "us-west-2"
+    }
+    }))
   }
 }
 
