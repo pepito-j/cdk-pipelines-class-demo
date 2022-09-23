@@ -1,0 +1,4 @@
+Resources:
+  MyStuff:
+    Type: AWS::SNS::Topic
+    Properties: {}
