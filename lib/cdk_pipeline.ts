@@ -18,7 +18,7 @@ export class CdkPipelineDemoStack extends Stack {
           connectionArn: 'arn:aws:codestar-connections:us-west-2:848135204948:connection/5ba7c6b8-2a9d-4b53-8c96-adf5ae0eeab5',
         }),
         commands: [
-          'cdk synth',
+          'npx cdk synth',
         ]
       })
     })
