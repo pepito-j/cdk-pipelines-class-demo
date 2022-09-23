@@ -26,13 +26,13 @@ export class CdkPipelineDemoStack extends Stack {
 
     cdkPipeline.addStage(new SNSStage(this, "SNSStage1", {
         env: {
-            region: "us-west-2"
+            region: "us-east-1"
         }
       })
     )
     cdkPipeline.addStage(new SNSStage(this, "SNSStage2", {
       env: {
-        region: "us-west-2"
+        region: "us-east-2"
     }
     }))
     cdkPipeline.addStage(new SNSStage(this, "SNSStage3", {
