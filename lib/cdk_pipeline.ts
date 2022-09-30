@@ -1,9 +1,7 @@
 import { Stack, StackProps, Stage, StageProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as cdk_pip from 'aws-cdk-lib/pipelines';
-import * as s3_assets from 'aws-cdk-lib/aws-s3-assets'
 import { Topic } from 'aws-cdk-lib/aws-sns'
-import * as path from 'path'
 
 export class CdkPipelineDemoStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -26,11 +24,12 @@ export class CdkPipelineDemoStack extends Stack {
 
     const preCodeBuildStepForBuildEnv = new cdk_pip.CodeBuildStep("BuildProcessAction", { // Define my CodeBuild processing step from a previous Stage here
       commands: [
-        'mkdir myOutputFiles',
-        'touch myOutputFiles/tempFile',
+        'mkdir myOutputArtifactDir',
+        'mkdir myOutputArtifactDir/myOutputFiles',
+        'touch myOutputArtifactDir/myOutputFiles/tempFile',
         'echo "Hello World" > myOutputArtifactDir/myOutputFiles/tempFile'
       ],
-      primaryOutputDirectory: 'myOutputArtifactDir'
+      primaryOutputDirectory: 'myOutputArtifactDir' // This becomes the "root" directory of the Artifact we upload
     })
     new cdk_pip.CodeBuildStep("DevProcessAction", { // Define my CodeBuild processing step from a previous Stage here
       commands: [
@@ -61,7 +60,6 @@ export class CdkPipelineDemoStack extends Stack {
         })
       ]
     })
-
   }
 }
 
