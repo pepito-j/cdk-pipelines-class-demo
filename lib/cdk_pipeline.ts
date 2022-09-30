@@ -28,10 +28,19 @@ export class CdkPipelineDemoStack extends Stack {
       commands: [
         'mkdir myOutputFiles',
         'touch myOutputFiles/tempFile',
+        'echo "Hello World" > myOutputArtifactDir/myOutputFiles/tempFile'
+      ],
+      primaryOutputDirectory: 'myOutputArtifactDir'
+    })
+    new cdk_pip.CodeBuildStep("DevProcessAction", { // Define my CodeBuild processing step from a previous Stage here
+      commands: [
+        'mkdir myOutputFiles',
+        'touch myOutputFiles/tempFile',
         'echo "Hello World" > myOutputFiles/tempFile'
       ],
-      primaryOutputDirectory: 'myOutputFiles'
+      input: preCodeBuildStepForBuildEnv.primaryOutput // Reference the previous CodeBuild Action's property "primaryOutput" to retreive the Output artifact and place it into my 
     })
+
 
     // "Build" Environment for a CodeBuild Action for SNS Stage 1
     cdkPipeline.addStage(new SNSStage(this, "SNSStage1", ), {
