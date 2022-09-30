@@ -46,7 +46,7 @@ export class CdkPipelineDemoStack extends Stack {
         new cdk_pip.CodeBuildStep("DevProcessAction", {  // Define my CodeBuild processing step to use the previous CodeBuild Action's Output artifact
           commands: [
             'ls -la', 
-            'echo myOutputFiles/tempFile 2> /dev/null'
+            'cat myOutputFiles/tempFile 2> /dev/null'
           ],
           input: preCodeBuildStepForBuildEnv.primaryOutput // Reference the previous CodeBuild Action's property "primaryOutput" to retreive the Output artifact and place it into my latter CodeBuild action
         })
