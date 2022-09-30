@@ -5,7 +5,6 @@ import * as s3_assets from 'aws-cdk-lib/aws-s3-assets'
 import { Topic } from 'aws-cdk-lib/aws-sns'
 import * as path from 'path'
 
-
 export class CdkPipelineDemoStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -21,28 +20,60 @@ export class CdkPipelineDemoStack extends Stack {
           'npm ci', // npm clean install
           'npx cdk synth', // npx infers runnign npm packages (like cdk)
         ]
-      })
+      }),
+      selfMutation: false
     })
 
-    cdkPipeline.addStage(new SNSStage(this, "SNSStage3", ))
+    const preCodeBuildStepForBuildEnv = new cdk_pip.CodeBuildStep("BuildProcessAction", { // Define my CodeBuild processing step from a previous Stage here
+      commands: [
+        'mkdir myOutputFiles',
+        'touch myOutputFiles/tempFile',
+        'echo "Hello World" > myOutputFiles/tempFile'
+      ],
+      primaryOutputDirectory: 'myOutputFiles'
+    })
+
+    // "Build" Environment for a CodeBuild Action for SNS Stage 1
+    cdkPipeline.addStage(new SNSStage(this, "SNSStage1", ), {
+        post: [
+          preCodeBuildStepForBuildEnv // Place my Codebuild processing step in the previous stage
+        ]
+    })
+
+    // "Dev" Environment for a CodeBuild Action for SNS Stage 2
+    cdkPipeline.addStage(new SNSStage(this, "SNSStage2", ), {
+      pre: [
+        new cdk_pip.CodeBuildStep("DevProcessAction", {  // Define my CodeBuild processing step to use the previous CodeBuild Action's Output artifact
+          commands: [
+            'echo myOutputFiles/tempFile'
+          ],
+          input: preCodeBuildStepForBuildEnv.primaryOutput // Reference the previous CodeBuild Action's property "primaryOutput" to retreive the Output artifact and place it into my latter CodeBuild action
+        })
+      ]
+    })
+
   }
 }
+
+// Crtl + K + C == Crtl + /
+// Crtl + K + U == Crtl + /
+// Crtl + / => Turns on and off
 
 class SNSStage extends Stage {
     constructor(scope: Construct, id: string, props?: StageProps){
         super(scope, id, props)
         new TopicsStack(this, "MyTopicsStack1",{
-          env: {
-            account: "848135204948",
-            region: "us-west-2"
-          }
+          // env: {
+          //   account: "848135204948",
+          //   region: "us-west-2"
+          // }
         })
-        new TopicsStack(this, "MyTopicsStack2", {
-          env: {
-            account: "848135204948",
-            region: "us-east-1"
-          }
-        })
+        // new TopicsStack(this, "MyTopicsStack2", {
+        //   // env: {
+        //   //   account: "848135204948",
+        //   //   region: "us-east-1"
+        //   // }
+        // })
     }
 }
 
@@ -51,9 +82,9 @@ class TopicsStack extends Stack {
         super(scope, id, props)
 
         new Topic(this, "MyTopicResource")
-        new s3_assets.Asset(this, "MyAsset", {
-          path: path.join(__dirname, "someRandomFile.yml")
-        })
+        // new s3_assets.Asset(this, "MyAsset", {
+        //   path: path.join(__dirname, "someRandomFile.yml")
+        // })
     }
 }
 
