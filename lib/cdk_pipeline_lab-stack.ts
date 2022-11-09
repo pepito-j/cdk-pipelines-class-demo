@@ -10,14 +10,12 @@ export class CdkPipelineStack extends Stack {
     const pipeline = new CodePipeline(this, 'Pipeline', {
         pipelineName: 'MyPipeline',
         synth: new ShellStep('Synth', {
-          // input: CodePipelineSource.connection('<GITHUB_USERNAME>/<GITHUB_REPO_NAME>', '<BRANCH_NAME>', {
-          //   connectionArn: '<CODE_STAR_CONNECTION_ARN>'
-          // }),
           input: CodePipelineSource.connection('pepito-j/cdk-pipelines-class-demo', 'master', {
             connectionArn: 'arn:aws:codestar-connections:us-west-2:848135204948:connection/5ba7c6b8-2a9d-4b53-8c96-adf5ae0eeab5'
           }),
           commands: ['npm ci','npx cdk synth']
-        })
+        }),
+        selfMutation: false
       });
 
       pipeline.addStage(new MyPipelineAppStage(this, "MyPipelineAppStage"));
