@@ -15,7 +15,7 @@ export class CdkPipelineStack extends Stack {
           }),
           commands: ['npm ci','npx cdk synth']
         }),
-        selfMutation: false
+        selfMutation: true
       });
 
       pipeline.addStage(new MyPipelineAppStage(this, "MyPipelineAppStage"));
