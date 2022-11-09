@@ -1,16 +1,23 @@
-import * as cdk from 'aws-cdk-lib';
+import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelines';
+import { MyPipelineAppStage } from './my-pipeline-app-stage'
 
-export class CdkPipelineLabStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+export class CdkPipelineStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    const pipeline = new CodePipeline(this, 'Pipeline', {
+        pipelineName: 'MyPipeline',
+        synth: new ShellStep('Synth', {
+          input: CodePipelineSource.connection('<GITHUB_USERNAME>/<GITHUB_REPO_NAME>', '<BRANCH_NAME>', {
+            connectionArn: '<CODE_STAR_CONNECTION_ARN>'
+          }),
+          commands: ['npm ci', 'npm run build', 'npx cdk synth']
+        })
+      });
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'CdkPipelineLabQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
-  }
+      pipeline.addStage(new MyPipelineAppStage(this, "MyPipelineAppStage"));
+    
+    }
 }
