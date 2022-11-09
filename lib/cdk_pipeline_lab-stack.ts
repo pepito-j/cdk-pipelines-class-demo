@@ -1,7 +1,7 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelines';
-import { MyPipelineAppStage } from './my-pipeline-app-stage'
+import { MyPipelineAppStage, MyPipelineOtherStacksStage } from './my-pipeline-app-stage'
 
 export class CdkPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -21,6 +21,6 @@ export class CdkPipelineStack extends Stack {
       pipeline.addStage(new MyPipelineAppStage(this, "MyPipelineAppStage"));
       const wave = pipeline.addWave("MyParallelStages")
       wave.addStage(new MyPipelineAppStage(this, "MyPipelineAppStage1"))
-      wave.addStage(new MyPipelineAppStage(this, "MyPipelineAppStage2"))
+      wave.addStage(new MyPipelineOtherStacksStage(this, "MyPipelineOtherStacksStage2"))
     }
 }
