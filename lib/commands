@@ -1,4 +1,0 @@
-Repository must be configured prior to using + Git configured on your workspace
-
-git init
-git remote add origin https://github.com/pepito-j/cdk-pipelines-class-demo

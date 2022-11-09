@@ -1,0 +1,14 @@
+Repository must be configured prior to using + Git configured on your workspace
+
+git init
+git remote add origin https://github.com/pepito-j/cdk-pipelines-class-demo
+git push --set-upstream origin master (or main)
+# Set our upstream branch to master within origin (where origin points to the remote repository we added earlier)
+
+git add ./**
+git commit -m "Some message"
+
+
+1st deploy
+
+and then begin pushing to repository
